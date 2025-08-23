@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppColor {
   static const Color color_white = Color(0xffFFFFFF);
   static const Color color_yellow = Color(0xffDDB130);
+  static const Color color_grey = Colors.grey;
   static const Color color_divider = Colors.white38;
   static const Color color_purple = Colors.purpleAccent;
   static const Color color_trans = Colors.transparent;
@@ -58,28 +59,37 @@ class AppColor {
   );
 
 
+  static const LinearGradient gradientS3CCenter= LinearGradient(
+  begin: Alignment.bottomLeft,
+  end: Alignment.topRight,
+  colors: [
+  Color(0xFFA55FA1),
+  Color(0xFF2E2F92),
+  ]);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  static const LinearGradient gradientS3CE =LinearGradient(
+  begin: Alignment.bottomLeft,
+  end: Alignment.topRight,
+  colors: [
+  Color(0xFFA55FA1),
+  Color(0xFF2E2F92),
+  ]);
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

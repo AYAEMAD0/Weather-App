@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:weather/api/api_service.dart';
-
+import 'package:weather/widgets/custom_card_day.dart';
+import 'package:weather/widgets/custom_card_moon.dart';
 import '../../api/api_response.dart';
 import '../../core/app_color.dart';
-import '../../widgets/custom_large_card_details.dart';
+import '../../widgets/custom_card_sunrise.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
@@ -14,108 +15,78 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  late Future<List<ApiResponse>> value;
+  late Future<Map<String, dynamic>> value;
+
   @override
   void initState() {
-    value = ApiService().daysWeather();
+    value = _loadData();
     super.initState();
+  }
+
+  Future<Map<String, dynamic>> _loadData() async {
+    final days = ApiService().daysWeather();
+    final astro = ApiService().astroWeather();
+    final results = await Future.wait([days, astro]);
+    return {
+      "days": results[0],
+      "astro": results[1],
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          SizedBox(height: 20),
-          Text(
-            '7-Days Forecasts',
-            style: TextStyle(
-              color: AppColor.color_white,
-              fontSize: 23,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          SizedBox(height: 5),
-          FutureBuilder(
-            future: value,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(color: AppColor.color_white),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    "Error: ${snapshot.error}",
-                    style: const TextStyle(
-                      color: AppColor.color_white,
-                      fontSize: 30,
-                    ),
+      child: FutureBuilder<Map<String, dynamic>>(
+        future: value,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColor.color_white),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text("Error: ${snapshot.error}",
+                style: const TextStyle(color: AppColor.color_white, fontSize: 30),
+              ),
+            );
+          } else if (snapshot.hasData) {
+            final daysData = snapshot.data!["days"] as List<ApiResponse>;
+            final astroData = snapshot.data!["astro"] as ApiResponse;
+
+            return Column(
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                  '7-Days Forecasts',
+                  style: TextStyle(
+                    color: AppColor.color_white,
+                    fontSize: 23,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
                   ),
-                );
-              } else if (snapshot.hasData) {
-                final dataList = snapshot.data!;
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: dataList.map((data) {
-                        return Container(
-                          width: 90,
-                          height: 180,
-                          padding: const EdgeInsets.all(12),
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            gradient: AppColor.gradientS3C2,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                '${data.date}',
-                                style: const TextStyle(
-                                  color: AppColor.color_white,
-                                  fontSize: 18,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Image.network(
-                                data.image!,
-                                height: 50,
-                              ),
-                              Text(
-                                '${data.temp}°',
-                                style: const TextStyle(
-                                  color: AppColor.color_white,
-                                  fontSize: 18,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    )
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: Text(
-                    "No data available",
-                    style: TextStyle(color: AppColor.color_white, fontSize: 24),
-                  ),
-                );
-              }
-            },
-          ),
-          CustomLargeCardDetails(),
-        ],
+                ),
+                const SizedBox(height: 5),
+
+                // 7 Days Forecast
+                CustomCardDay(dataList: daysData),
+                // Sunrise
+                CustomCardSunrise (data: astroData),
+                const SizedBox(height: 10),
+                // Moon
+                CustomCardMoon(data: astroData),
+              ],
+            );
+          } else {
+            return const Center(
+              child: Text(
+                "No data available",
+                style: TextStyle(color: AppColor.color_white, fontSize: 24),
+              ),
+            );
+          }
+        },
       ),
     );
   }
 }
+

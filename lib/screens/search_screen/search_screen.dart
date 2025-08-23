@@ -31,6 +31,8 @@ class SearchScreen extends StatelessWidget {
               keyboardType:TextInputType.text,
               decoration: InputDecoration(
                 hintText: 'search',
+                prefixIcon: Icon(Icons.search),
+                prefixIconColor: AppColor.color_grey.withOpacity(0.90),
                 hintStyle: TextStyle(
                   fontSize: 16,
                   color: const Color(0xff8391A1),
@@ -41,24 +43,24 @@ class SearchScreen extends StatelessWidget {
                   vertical: 18,
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(116),
+                  borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide(
                       color: AppColor.color_border_text_field,
                       width: 1),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(25),
                   borderSide: const BorderSide(
                     color: AppColor.color_border_text_field,
                     width: 1,
                   ),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(25),
                   borderSide: const BorderSide(color: AppColor.color_error_text_field, width: 1),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(25),
                   borderSide: const BorderSide(color:  AppColor.color_error_text_field, width: 1),
                 ),
                 filled: true,
