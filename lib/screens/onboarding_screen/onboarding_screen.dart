@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather/screens/main_screen/main_screen.dart';
 
 import '../../core/app_color.dart';
 import '../home_screen/home_screen.dart';
@@ -46,7 +47,7 @@ class OnboardingScreen extends StatelessWidget {
                 SizedBox(height: 53),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, HomeScreen.home_routeName);
+                    Navigator.pushReplacementNamed(context, MainScreen.main_routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColor.color_yellow,
