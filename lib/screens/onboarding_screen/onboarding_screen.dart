@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../core/color_app.dart';
+import '../../core/app_color.dart';
 import '../home_screen/home_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
-  static final onboarding_id = 'onboarding';
-
+  static final onboarding_routeName = 'onboarding';
 
 
 @override
@@ -14,23 +13,9 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xff1f264a),
-              Color(0xff22284E),
-              Color(0xff232a54),
-              Color(0xff343575),
-              Color(0xff413A8A),
-              Color(0xff4E3E99),
-              Color(0xff6148A6),
-              Color(0xff7C4FAC),
-              Color(0xff8749B1),
-              Color(0xff973ead),
-            ],
-          ),
+          gradient:AppColor.gradient1
         ),
+
         child: SafeArea(
           child: Center(
             child: Column(
@@ -38,14 +23,13 @@ class OnboardingScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/images/onboarding.png',
-                  height: 200,
-                  //  width: 428,
+                  height: 300,
                 ),
                 Text(
                   'Weather',
                   style: TextStyle(
-                    color: ColorApp.color_white,
-                    fontSize: 64,
+                    color: AppColor.color_white,
+                    fontSize: 55,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                   ),
@@ -53,8 +37,8 @@ class OnboardingScreen extends StatelessWidget {
                 Text(
                   'ForeCasts',
                   style: TextStyle(
-                    color: ColorApp.color_yellow,
-                    fontSize: 64,
+                    color: AppColor.color_yellow,
+                    fontSize: 58,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                   ),
@@ -62,10 +46,10 @@ class OnboardingScreen extends StatelessWidget {
                 SizedBox(height: 53),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, HomeScreen.home_id);
+                    Navigator.pushReplacementNamed(context, HomeScreen.home_routeName);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: ColorApp.color_yellow,
+                    backgroundColor: AppColor.color_yellow,
                     minimumSize: Size(250, 50),
                     //padding: EdgeInsets.all(19),
                   ),

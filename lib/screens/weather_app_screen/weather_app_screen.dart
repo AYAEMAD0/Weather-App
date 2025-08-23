@@ -13,11 +13,11 @@ class WeatherAppScreen extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        SplashScreen.splash_id:(context)=>SplashScreen(),
-        OnboardingScreen.onboarding_id:(context)=>OnboardingScreen(),
-        HomeScreen.home_id: (context) => HomeScreen(),
-        SearchScreen.search_id:(context)=>SearchScreen(),
-        DetailsScreen.details_id:(context)=>DetailsScreen(),
+        SplashScreen.splash_routeName:(context)=>SplashScreen(),
+        OnboardingScreen.onboarding_routeName:(context)=>OnboardingScreen(),
+        HomeScreen.home_routeName: (context) => HomeScreen(),
+        SearchScreen.search_routeName:(context)=>SearchScreen(),
+        DetailsScreen.details_routeName:(context)=>DetailsScreen(),
       },
       home: SplashScreen(),
     );
