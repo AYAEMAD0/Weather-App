@@ -9,7 +9,7 @@ class ApiService {
       'http://api.weatherapi.com/v1/forecast.json',
       queryParameters: {
         "key": "0b7c23d0a7ca4f61a2e112846252308",
-        "q": "London",
+        "q": "Cairo",
         "days": 1,
       },
     );

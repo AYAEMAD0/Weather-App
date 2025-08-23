@@ -48,7 +48,13 @@ class _HomeScreenState extends State<HomeScreen> {
               final data = snapshot.data!;
               return Column(
                 children: [
-                  Image.network(data.image!, height: 150),
+                  Image.network(
+                    data.image!,
+                    width: 150,
+                    height: 150,
+                    fit: BoxFit.contain,
+                   filterQuality: FilterQuality.high,
+                    ),
                   Text(
                     '${data.temp}°',
                     style: TextStyle(
@@ -58,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 10,),
+                 SizedBox(height: 10,),
                   Text(
                     data.condition!,
                     style: TextStyle(
@@ -68,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(height: 10,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -93,9 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                 SizedBox(height: 15),
                   Image.asset('assets/images/house.png', height: 140),
-                  CustomCardHomeEnd(),
+                  Expanded(child: CustomCardHomeEnd()),
                 ],
               );
             } else {

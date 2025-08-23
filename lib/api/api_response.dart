@@ -20,7 +20,7 @@ class ApiResponse{
      this.temp,
      this.minTemp,
      this.maxTemp,
-     this.date,
+    this.date,
     this.sunrise,
     this.sunset,
     this.moonrise,
@@ -30,13 +30,9 @@ class ApiResponse{
   });
 
   factory ApiResponse.fromJson(Map<String, dynamic> json){
-    String iconUrl = json["day"]["condition"]["icon"];
-    if (iconUrl.startsWith("//")) {
-      iconUrl = "https:$iconUrl";
-    }
+    String iconUrl =fixIconUrl(json["day"]["condition"]["icon"]);
 
     return ApiResponse(
-      //image: json["day"]["condition"]["icon"],
       image: iconUrl,
       condition: json["day"]["condition"]["text"],
       temp: (json["day"]["avgtemp_c"] as num).toInt(),
@@ -44,26 +40,34 @@ class ApiResponse{
       maxTemp: (json["day"]["maxtemp_c"] as num).toInt(),
     );
   }
+
+
   factory ApiResponse.fromHour(Map<String, dynamic> json) {
-    //format package intl
-    //"2025-08-23 05:00"
+    // "2025-08-23 05:00"
     String rawTime = json["time"];
-    DateTime parsedTime = DateTime.parse(rawTime);  //parsing DataTime
-    String formattedTime = DateFormat('HH:mm').format(parsedTime);  //change format
+    DateTime parsedTime = DateTime.parse(rawTime);  // Parsing DateTime
+    // Formatting time
+    String formattedTime = DateFormat('HH:mm').format(parsedTime);
+
+    // Fixing icon URL
+    String iconUrl =fixIconUrl(json["condition"]["icon"])   ;
 
     return ApiResponse(
-      image: json["condition"]["icon"],
+      image: iconUrl,
       temp: (json["temp_c"] as num).toInt(),
       date: formattedTime,
     );
   }
 
+
   factory ApiResponse.fromDay(Map<String, dynamic> json){
     String rawDate = json["date"]; // e.g. "2025-08-23"
     DateTime parsedDate = DateTime.parse(rawDate);
     String formattedDate = DateFormat('dd/MM').format(parsedDate);
+    String iconUrl =fixIconUrl(json["day"]["condition"]["icon"]) ;
+
     return ApiResponse(
-      image: json["day"]["condition"]["icon"],
+      image: iconUrl,
       temp: (json["day"]["avgtemp_c"] as num).toInt(),
       condition: json["day"]["condition"]["text"],
       date: formattedDate,
@@ -80,4 +84,9 @@ class ApiResponse{
       moon_illumination:json["moon_illumination"],
     );
   }
+}
+
+String fixIconUrl(String url) {
+  if (url.startsWith("//")) return "https:$url";
+  return url;
 }
