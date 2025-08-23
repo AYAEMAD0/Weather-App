@@ -12,7 +12,10 @@ class CustomCardHomeEnd extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
           gradient: AppColor.gradientS2C,
         ),
         child: Column(
@@ -43,18 +46,18 @@ class CustomCardHomeEnd extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(height: 5),
             Divider(color: AppColor.color_divider),
-            SizedBox(height: 5,),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          CustomHourHomeEnd(),
-          CustomHourHomeEnd(),
-          CustomHourHomeEnd(),
-          CustomHourHomeEnd(),
-
-        ])
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomHourHomeEnd(),
+                CustomHourHomeEnd(),
+                CustomHourHomeEnd(),
+                CustomHourHomeEnd(),
+              ],
+            ),
           ],
         ),
       ),

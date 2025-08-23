@@ -14,14 +14,14 @@ class CustomHourHomeEnd extends StatelessWidget {
                   '19°',
                   style: TextStyle(
                     color: AppColor.color_white,
-                    fontSize: 16,
+                    fontSize: 18,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Image.asset(
                   'assets/images/onboarding.png',
-                  height: 60,
+                  height: 65,
                 ),
                 SizedBox(height: 10,),
                 Text(
