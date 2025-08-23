@@ -58,7 +58,7 @@ class _MainScreenState extends State<MainScreen> {
 
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(gradient: AppColor.gradient2),
+        decoration: BoxDecoration(gradient: AppColor.gradient1),
         child: SafeArea(
           child: pages[index]
         ),

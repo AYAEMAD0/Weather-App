@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(gradient: AppColor.gradient2),
+      decoration: BoxDecoration(gradient: AppColor.gradient1),
       child: SafeArea(
         child: FutureBuilder(
           future: value,
