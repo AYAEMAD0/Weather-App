@@ -4,6 +4,10 @@ class AppColor {
   static const Color color_white = Color(0xffFFFFFF);
   static const Color color_yellow = Color(0xffDDB130);
   static const Color color_divider = Colors.white38;
+  static const Color color_purple = Colors.purpleAccent;
+  static const Color color_trans = Colors.transparent;
+  static const Color color_border_text_field = Color(0xffD6D6D6);
+  static const Color color_error_text_field = Colors.red;
 
   static const LinearGradient gradient1 = LinearGradient(
     begin: Alignment.topCenter,

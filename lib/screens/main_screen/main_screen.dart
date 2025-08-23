@@ -34,14 +34,14 @@ class _MainScreenState extends State<MainScreen> {
               index=current;
             });
           },
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColor.color_trans,
           elevation: 0,
           currentIndex: index,
           selectedItemColor: AppColor.color_white,
           unselectedItemColor: AppColor.color_divider,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.location_on_outlined,size: 30,),
+              icon: Icon(Icons.home,size: 30,),
               label: '',
             ),
             BottomNavigationBarItem(
