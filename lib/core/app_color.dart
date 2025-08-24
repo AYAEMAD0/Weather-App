@@ -67,14 +67,6 @@ class AppColor {
   Color(0xFF2E2F92),
   ]);
 
-  static const LinearGradient gradientS3CE =LinearGradient(
-  begin: Alignment.bottomLeft,
-  end: Alignment.topRight,
-  colors: [
-  Color(0xFFA55FA1),
-  Color(0xFF2E2F92),
-  ]);
-
 
 }
 

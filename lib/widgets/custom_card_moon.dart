@@ -7,32 +7,41 @@ class CustomCardMoon extends StatelessWidget {
   final ApiResponse data;
   @override
   Widget build(BuildContext context) {
-    return  Expanded(
-            child: Row(
+    return Expanded(
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
               children: [
                 Expanded(
-                  child: Column(
-                    children: [
-                    Expanded(child: CustomInfoCard(
-                      title: 'Moonrise',
-                      value: data.moonrise?? '',
-                      isMoon: true,
-                      title2:'Moonset',
-                      value2:data.moonset ?? '',)),
-                  ],),
-                ),
-                Expanded(
-                  child: Column(children: [
-                    Expanded(child: CustomInfoCard(
-                      title: 'Moon_phase',
-                      value: data.moon_phase ?? '',
-                      isMoon: true,
-                      title2:'Moon_illumination',
-                      value2:data.moon_illumination.toString() ,)),
-                  ],),
+                  child: CustomInfoCard(
+                    title: 'Moonrise',
+                    value: data.moonrise ?? '',
+                    isMoon: true,
+                    title2: 'Moonset',
+                    value2: data.moonset ?? '',
+                  ),
                 ),
               ],
             ),
-          );
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: CustomInfoCard(
+                    title: 'Moon_phase',
+                    value: data.moon_phase ?? '',
+                    isMoon: true,
+                    title2: 'Moon_illumination',
+                    value2: data.moon_illumination.toString(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

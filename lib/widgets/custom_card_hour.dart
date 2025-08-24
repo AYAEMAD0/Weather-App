@@ -4,21 +4,27 @@ import 'package:weather/widgets/reusable_future_builder.dart';
 import '../api/api_response.dart';
 import '../api/api_service.dart';
 import '../core/app_color.dart';
+import 'location_helper.dart';
 
-class CustomCardHomeEnd extends StatefulWidget {
-  const CustomCardHomeEnd({super.key});
+class CustomCardHour extends StatefulWidget {
+  const CustomCardHour({super.key});
 
   @override
-  State<CustomCardHomeEnd> createState() => _CustomCardHomeEndState();
+  State<CustomCardHour> createState() => _CustomCardHourState();
 }
 
-class _CustomCardHomeEndState extends State<CustomCardHomeEnd> {
+class _CustomCardHourState extends State<CustomCardHour> {
   late Future<List<ApiResponse>> value;
 
   @override
   void initState() {
-    value = ApiService().hoursWeather();
     super.initState();
+    value = _loadData();
+  }
+
+  Future<List<ApiResponse>> _loadData() async {
+    final position = await LocationHelper.getCurrentLocation();
+    return ApiService().hoursWeather(position.latitude, position.longitude);
   }
 
   @override
@@ -27,13 +33,13 @@ class _CustomCardHomeEndState extends State<CustomCardHomeEnd> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
         ),
-        gradient: AppColor.gradientS2C,
+        gradient: AppColor.gradientS3CCenter,
       ),
       child: Column(
         children: [
@@ -42,7 +48,7 @@ class _CustomCardHomeEndState extends State<CustomCardHomeEnd> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Today',
                   style: TextStyle(
                     color: AppColor.color_white,
@@ -51,8 +57,8 @@ class _CustomCardHomeEndState extends State<CustomCardHomeEnd> {
                   ),
                 ),
                 Text(
-                  todayDate, //error
-                  style: TextStyle(
+                  todayDate,
+                  style: const TextStyle(
                     color: AppColor.color_white,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
@@ -61,9 +67,9 @@ class _CustomCardHomeEndState extends State<CustomCardHomeEnd> {
               ],
             ),
           ),
-          const SizedBox(height: 5),
-          Divider(color: AppColor.color_divider),
-          const SizedBox(height: 5),
+          const SizedBox(height: 2),
+          Divider(color: AppColor.color_divider, thickness: 1),
+          const SizedBox(height: 2),
           ReusableFutureBuilder<List<ApiResponse>>(
             future: value,
             onSuccess: (snapshot) {
@@ -83,13 +89,13 @@ class _CustomCardHomeEndState extends State<CustomCardHomeEnd> {
                               '${data.temp}°',
                               style: const TextStyle(
                                 color: AppColor.color_white,
-                                fontSize: 16,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                             Image.network(
                               data.image!,
-                              height: 70,
+                              height: 65,
                               width: 65,
                               fit: BoxFit.contain,
                             ),

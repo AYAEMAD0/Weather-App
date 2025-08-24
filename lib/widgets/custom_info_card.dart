@@ -24,7 +24,7 @@ class CustomInfoCard extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        gradient: AppColor.gradientS3CE,
+        gradient: AppColor.gradientS3CCenter,
         borderRadius: BorderRadius.circular(22),
       ),
       child: isMoon
