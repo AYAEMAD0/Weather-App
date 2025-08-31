@@ -32,20 +32,43 @@ class CustomInfoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  '$title\n$value',
+                  title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: AppColor.color_white,
+                    color: AppColor.colorWhite,
                     fontSize: 16,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
                   ),
                 ),
+                SizedBox(height: 7,),
                 Text(
-                  '$title2\n$value2',
+                  value,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: AppColor.color_white,
+                    color: AppColor.colorWhite,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Text(
+                  '$title2',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: AppColor.colorWhite,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 7,),
+                Text(
+                  '$value2',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: AppColor.colorWhite,
                     fontSize: 16,
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w400,
@@ -53,16 +76,31 @@ class CustomInfoCard extends StatelessWidget {
                 ),
               ],
             )
-          : Text(
-              '$title\n$value',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColor.color_white,
-                fontSize: 16,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w400,
+          : Column(
+            children: [
+              Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: AppColor.colorWhite,
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              SizedBox(height: 7,),
+              Text(
+                value,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: AppColor.colorWhite,
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            ),
+            ],
+          ),
     );
   }
 }

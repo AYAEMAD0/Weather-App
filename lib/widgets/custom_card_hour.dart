@@ -1,32 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:weather/widgets/reusable_future_builder.dart';
-import '../api/api_response.dart';
-import '../api/api_service.dart';
 import '../core/app_color.dart';
-import 'location_helper.dart';
+import '../data/cubit/get_weather_hour/get_weather_hour_cubit.dart';
 
-class CustomCardHour extends StatefulWidget {
-  const CustomCardHour({super.key});
-
-  @override
-  State<CustomCardHour> createState() => _CustomCardHourState();
-}
-
-class _CustomCardHourState extends State<CustomCardHour> {
-  late Future<List<ApiResponse>> value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = _loadData();
-  }
-
-  Future<List<ApiResponse>> _loadData() async {
-    final position = await LocationHelper.getCurrentLocation();
-    return ApiService().hoursWeather(position.latitude, position.longitude);
-  }
-
+class CustomCardHour extends StatelessWidget {
+  const CustomCardHour({super.key, required this.position});
+  final Position position;
   @override
   Widget build(BuildContext context) {
     final todayDate = DateFormat('MMMM d').format(DateTime.now());
@@ -44,14 +26,14 @@ class _CustomCardHourState extends State<CustomCardHour> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   'Today',
                   style: TextStyle(
-                    color: AppColor.color_white,
+                    color: AppColor.colorWhite,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
                   ),
@@ -59,7 +41,7 @@ class _CustomCardHourState extends State<CustomCardHour> {
                 Text(
                   todayDate,
                   style: const TextStyle(
-                    color: AppColor.color_white,
+                    color: AppColor.colorWhite,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
                   ),
@@ -67,53 +49,75 @@ class _CustomCardHourState extends State<CustomCardHour> {
               ],
             ),
           ),
-          const SizedBox(height: 2),
-          Divider(color: AppColor.color_divider, thickness: 1),
-          const SizedBox(height: 2),
-          ReusableFutureBuilder<List<ApiResponse>>(
-            future: value,
-            onSuccess: (snapshot) {
-              final dataList = snapshot;
-              return SizedBox(
-                height: 130,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: dataList.map((data) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              '${data.temp}°',
-                              style: const TextStyle(
-                                color: AppColor.color_white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
+          const SizedBox(height: 3),
+          Divider(color: AppColor.colorDivider, thickness: 1.3),
+          const SizedBox(height: 3),
+          BlocBuilder<GetWeatherHourCubit, GetWeatherHourState>(
+            builder: (context, state) {
+              if (state is GetWeatherHourLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(color: AppColor.colorWhite),
+                );
+              } else if (state is GetWeatherHourSuccess) {
+                final dataList = state.hours;
+                return SizedBox(
+                  height: 130,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: dataList.map((data) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                '${data.temp}°',
+                                style: const TextStyle(
+                                  color: AppColor.colorWhite,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            Image.network(
-                              data.image!,
-                              height: 65,
-                              width: 65,
-                              fit: BoxFit.contain,
-                            ),
-                            Text(
-                              data.date!,
-                              style: const TextStyle(
-                                color: AppColor.color_white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
+                              CachedNetworkImage(
+                                imageUrl: data.image!,
+                                height: 65,
+                                width: 65,
+                                fit: BoxFit.contain,
+                                placeholder: (context, url) => Center(child: CircularProgressIndicator(color: AppColor.colorWhite,)),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error, size: 20, color: Colors.red),
+                                fadeInDuration: Duration(milliseconds: 500),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+
+                              Text(
+                                data.date!,
+                                style: const TextStyle(
+                                  color: AppColor.colorWhite,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
-              );
+                );
+              } else if (state is GetWeatherHourFailure) {
+                return Center(
+                  child: Text(
+                    "Error: ${state.message}",
+                    style: const TextStyle(
+                      color: AppColor.colorWhite,
+                      fontSize: 20,
+                    ),
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
             },
           ),
         ],

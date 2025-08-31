@@ -1,13 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:weather/api/api_service.dart';
-import 'package:weather/api/api_response.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather/widgets/custom_text_field.dart';
 import '../../core/app_color.dart';
-import '../../widgets/reusable_future_builder.dart';
+import '../../data/cubit/get_weather_by_city/get_weather_by_city_cubit.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
-  static final String search_routeName = 'search';
+  static const String searchRouteName = 'search';
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -16,14 +16,23 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
   String? city;
-  Future<ApiResponse>? _futureWeather;
+  Timer? _debounce;
 
-  void _searchCity() {
-    if (city != null && city!.isNotEmpty) {
-      setState(() {
-        _futureWeather = ApiService().getWeatherByCity(city!);
-      });
-    }
+  void onSearchChanged(String val) {
+    city = val;
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 600), () {
+      if (city != null && city!.isNotEmpty) {
+        context.read<GetWeatherByCityCubit>().getWeatherByCity(city!);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,30 +48,29 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Text(
                 'Search for City',
                 style: TextStyle(
-                  color: AppColor.color_white,
+                  color: AppColor.colorWhite,
                   fontSize: 25,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 30),
             CustomTextField(
               controller: searchController,
-              onChang: (val) {
-                city = val;
-                if (city != null && city!.isNotEmpty) {
-                  setState(() {
-                    _futureWeather = ApiService().getWeatherByCity(city!);
-                  });
-                }
-              },
+              onChang: onSearchChanged,
             ),
             const SizedBox(height: 40),
-            if (_futureWeather != null)
-              ReusableFutureBuilder<ApiResponse>(
-                future: _futureWeather!,
-                onSuccess: (weather) {
+            BlocBuilder<GetWeatherByCityCubit, GetWeatherByCityState>(
+              builder: (context, state) {
+                if (state is GetWeatherByCityLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColor.colorWhite,
+                    ),
+                  );
+                } else if (state is GetWeatherByCitySuccess) {
+                  final weather = state.data;
                   return Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
@@ -81,7 +89,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               Text(
                                 "Temp: ${weather.temp}°",
                                 style: TextStyle(
-                                  color: AppColor.color_white,
+                                  color: AppColor.colorWhite,
                                   fontSize: 25,
                                 ),
                               ),
@@ -89,7 +97,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               Text(
                                 "Condition: ${weather.condition}",
                                 style: TextStyle(
-                                  color: AppColor.color_white,
+                                  color: AppColor.colorWhite,
                                   fontSize: 20,
                                 ),
                               ),
@@ -108,11 +116,33 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                     ),
                   );
-                },
-              ),
+                } else if (state is GetWeatherByCityFailure) {
+                  return Center(
+                    child: Text(
+                      "Error: ${state.message}",
+                      style: const TextStyle(
+                        color: AppColor.colorWhite,
+                        fontSize: 20,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: Text(
+                      "Start typing to search...",
+                      style: TextStyle(
+                        color: AppColor.colorWhite,
+                        fontSize: 18,
+                      ),
+                    ),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
+

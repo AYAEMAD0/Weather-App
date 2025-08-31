@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
-import '../api/api_response.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import '../core/app_color.dart';
+import '../data/cubit/get_weather_astro/get_weather_astro_cubit.dart';
 import 'custom_info_card.dart';
 
 class CustomCardSunrise extends StatelessWidget {
-  const CustomCardSunrise ({super.key, required this.data});
-  final ApiResponse data;
+  const CustomCardSunrise({super.key, required this.position});
+  final Position position;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocBuilder<GetWeatherAstroCubit, GetWeatherAstroState>(
+      builder: (context, state) {
+          if (state is GetWeatherAstroSuccess ){
+          final data = state.data;
+          return Container(
             margin: const EdgeInsets.all(16),
             child: Column(
               children: [
@@ -17,5 +25,12 @@ class CustomCardSunrise extends StatelessWidget {
               ],
             ),
           );
+        } else if (state is GetWeatherAstroFailure) {
+          return Text("Error: ${state.message}",
+              style: const TextStyle(color: AppColor.colorWhite));
+        }
+        return const SizedBox();
+      },
+    );
   }
 }
