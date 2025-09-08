@@ -151,12 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             } else {
-              return const Center(
-                child: Text(
-                  "No data available",
-                  style: TextStyle(color: AppColor.colorWhite, fontSize: 24),
-                ),
-              );
+              return Container(color: AppColor.colorTrans,);
             }
           },
         ),

@@ -9,13 +9,20 @@ class CustomCardDay extends StatelessWidget {
   const CustomCardDay({super.key, required this.position});
   final Position position;
 
+  bool isToday(String apiDate) {
+    final now = DateTime.now();
+    final nowString =
+        "${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}";
+    return nowString == apiDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: BlocBuilder<GetWeatherDayCubit, GetWeatherDayState>(
         builder: (context, state) {
-            if (state is GetWeatherDaySuccess) {
+          if (state is GetWeatherDaySuccess) {
             final dataList = state.data;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -27,7 +34,9 @@ class CustomCardDay extends StatelessWidget {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      gradient: AppColor.gradientS3C1,
+                      gradient: isToday(data.date!)
+                          ? AppColor.gradientS3C1
+                          : AppColor.gradientS3C2,
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Column(
@@ -45,7 +54,11 @@ class CustomCardDay extends StatelessWidget {
                         CachedNetworkImage(
                           imageUrl: data.image!,
                           height: 50,
-                          placeholder: (context, url) => Center(child: CircularProgressIndicator(color: AppColor.colorWhite,)),
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: AppColor.colorWhite,
+                            ),
+                          ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error, size: 20, color: Colors.red),
                           fadeInDuration: Duration(milliseconds: 500),

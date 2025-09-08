@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:weather/data/models/weather_response.dart';
 
 class ApiService {
-  final String apiKey = "0b7c23d0a7ca4f61a2e112846252308";
+  final String apiKey = "dad57a06df7b4a71a2d72724250809";
   final String baseUrl = "http://api.weatherapi.com/v1/forecast.json";
 
   Dio _createDio({required Map<String, dynamic> params}) {

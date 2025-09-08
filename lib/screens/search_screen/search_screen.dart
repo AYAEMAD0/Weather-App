@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather/widgets/custom_text_field.dart';
+import '../../core/app_asset.dart';
 import '../../core/app_color.dart';
 import '../../data/cubit/get_weather_by_city/get_weather_by_city_cubit.dart';
 
@@ -38,111 +40,109 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
-            Center(
-              child: Text(
-                'Search for City',
-                style: TextStyle(
-                  color: AppColor.colorWhite,
-                  fontSize: 25,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              Center(
+                child: Text(
+                  'Search for City',
+                  style: TextStyle(
+                    color: AppColor.colorWhite,
+                    fontSize: 25,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-            CustomTextField(
-              controller: searchController,
-              onChang: onSearchChanged,
-            ),
-            const SizedBox(height: 40),
-            BlocBuilder<GetWeatherByCityCubit, GetWeatherByCityState>(
-              builder: (context, state) {
-                if (state is GetWeatherByCityLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColor.colorWhite,
-                    ),
-                  );
-                } else if (state is GetWeatherByCitySuccess) {
-                  final weather = state.data;
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      gradient: AppColor.gradientS2C,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Temp: ${weather.temp}°",
-                                style: TextStyle(
-                                  color: AppColor.colorWhite,
-                                  fontSize: 25,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Condition: ${weather.condition}",
-                                style: TextStyle(
-                                  color: AppColor.colorWhite,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        if (weather.image != null)
+              const SizedBox(height: 30),
+              CustomTextField(
+                controller: searchController,
+                onChang: onSearchChanged,
+              ),
+              const SizedBox(height: 40),
+              BlocBuilder<GetWeatherByCityCubit, GetWeatherByCityState>(
+                builder: (context, state) {
+                  if (state is GetWeatherByCityLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.colorWhite,
+                      ),
+                    );
+                  } else if (state is GetWeatherByCitySuccess) {
+                    final weather = state.data;
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        gradient: AppColor.gradientS2C,
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Row(
+                        children: [
                           Expanded(
-                            flex: 1,
-                            child: Image.network(
-                              weather.image!,
-                              fit: BoxFit.cover,
+                            flex: 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Temp: ${weather.temp}°",
+                                  style: TextStyle(
+                                    color: AppColor.colorWhite,
+                                    fontSize: 23,
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  "Condition: ${weather.condition}",
+                                  style: TextStyle(
+                                    color: AppColor.colorWhite,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                      ],
-                    ),
-                  );
-                } else if (state is GetWeatherByCityFailure) {
-                  return Center(
-                    child: Text(
-                      "Error: ${state.message}",
-                      style: const TextStyle(
-                        color: AppColor.colorWhite,
-                        fontSize: 20,
+                          const SizedBox(width: 10),
+                          if (weather.image != null)
+                            Expanded(
+                              flex: 1,
+                              child: Image.network(
+                                weather.image!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                        ],
                       ),
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: Text(
-                      "Start typing to search...",
-                      style: TextStyle(
-                        color: AppColor.colorWhite,
-                        fontSize: 18,
+                    );
+                  } else if (state is GetWeatherByCityFailure) {
+                    return Center(
+                      child: Text(
+                        "Error: ${state.message}",
+                        style: const TextStyle(
+                          color: AppColor.colorWhite,
+                          fontSize: 20,
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
+                    );
+                  } else {
+                    return SizedBox(
+                      height: 400,
+                      child: Center(
+                        child: Center(child: Image.asset(AppAsset.searchImage, height: 150)),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
-

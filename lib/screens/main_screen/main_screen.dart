@@ -73,10 +73,11 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Container(
         width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(gradient: AppColor.gradient1),
         child: SafeArea(
           child: position == null
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(child: CircularProgressIndicator(color: AppColor.colorWhite,))
               : pages[index],
         ),
       ),
